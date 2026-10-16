@@ -1,0 +1,490 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#07070c" />
+<title>Empire01Sec // Unlock Terminal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#050508; --bg-2:#0a0a12;
+    --panel:rgba(18,18,28,.72); --panel-solid:#12121c;
+    --line:rgba(255,255,255,.08); --line-2:rgba(255,255,255,.14);
+    --text:#eaeaf2; --muted:#8a8aa0; --dim:#5c5c72;
+    --accent:#7c5cff; --accent-2:#00e0c6; --accent-3:#ff3b6b;
+    --gold:#ffb020; --ok:#22d68a;
+    --glow:0 0 40px rgba(124,92,255,.35);
+    --mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    min-height:100vh;
+    background:
+      radial-gradient(1100px 800px at 85% -5%, rgba(124,92,255,.18), transparent 55%),
+      radial-gradient(900px 700px at -10% 105%, rgba(0,224,198,.12), transparent 55%),
+      radial-gradient(700px 500px at 50% 50%, rgba(255,59,107,.05), transparent 60%),
+      var(--bg);
+    color:var(--text); font-family:var(--sans); line-height:1.55;
+    overflow-x:hidden; -webkit-font-smoothing:antialiased;
+  }
+  body::before{
+    content:""; position:fixed; inset:0;
+    background-image:
+      linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+    background-size:48px 48px;
+    mask-image:radial-gradient(circle at 50% 30%, #000 0%, transparent 80%);
+    pointer-events:none; z-index:0;
+  }
+  .wrap{position:relative;z-index:1;max-width:1180px;margin:0 auto;padding:22px 22px 80px}
+  nav{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:14px 18px;border:1px solid var(--line);
+    background:var(--panel);backdrop-filter:blur(18px);
+    border-radius:16px;margin-bottom:34px;
+    animation:drop .7s cubic-bezier(.2,.7,.2,1) both;
+  }
+  @keyframes drop{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:none}}
+  .brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit}
+  .orb{
+    width:36px;height:36px;border-radius:50%;position:relative;flex:none;
+    background:conic-gradient(from 0deg,#7c5cff,#00e0c6,#ff3b6b,#ffb020,#7c5cff);
+    animation:spin 9s linear infinite;box-shadow:var(--glow);
+  }
+  .orb::after{content:"";position:absolute;inset:6px;border-radius:50%;background:var(--bg-2)}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .brand b{font-size:15px;letter-spacing:.12em;font-weight:700}
+  .brand small{display:block;font-size:10px;letter-spacing:.24em;color:var(--muted);margin-top:2px}
+  .pill{
+    font-family:var(--mono);font-size:11px;letter-spacing:.08em;
+    padding:6px 12px;border-radius:999px;border:1px solid var(--line);
+    color:var(--muted);background:rgba(255,255,255,.02);
+    display:flex;align-items:center;gap:7px;
+  }
+  .pill .live{width:7px;height:7px;border-radius:50%;background:var(--ok);box-shadow:0 0 10px var(--ok);animation:pulse 1.8s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+  .hero{text-align:center;margin:34px 0 44px}
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:8px;
+    font-family:var(--mono);font-size:11px;letter-spacing:.24em;
+    color:var(--accent-2);text-transform:uppercase;
+    padding:7px 14px;border:1px solid rgba(0,224,198,.25);
+    border-radius:999px;background:rgba(0,224,198,.05);margin-bottom:22px;
+  }
+  .eyebrow .dotp{width:6px;height:6px;border-radius:50%;background:var(--accent-2);box-shadow:0 0 10px var(--accent-2);animation:pulse 1.6s ease-in-out infinite}
+  h1{
+    font-size:clamp(34px,6vw,68px);
+    line-height:1.02;letter-spacing:-.02em;font-weight:800;margin:0 0 18px;
+    background:linear-gradient(180deg,#fff 0%,#b7a8ff 60%,#7c5cff 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  h1 .grad{background:linear-gradient(90deg,#00e0c6,#7c5cff 60%,#ff3b6b);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .sub{max-width:640px;margin:0 auto;color:var(--muted);font-size:16px}
+  .sub b{color:var(--text);font-weight:600}
+
+  .board{
+    margin-top:56px;border:1px solid var(--line);
+    background:linear-gradient(180deg, rgba(255,255,255,.02), transparent 40%), var(--panel);
+    backdrop-filter:blur(18px);border-radius:24px;overflow:hidden;
+    box-shadow:0 30px 80px -40px rgba(0,0,0,.8);
+  }
+  .board-head{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:20px 26px;border-bottom:1px solid var(--line);
+    flex-wrap:wrap;gap:12px;
+  }
+  .board-head h2{margin:0;font-size:16px;letter-spacing:.06em;font-weight:700;display:flex;align-items:center;gap:10px}
+  .board-head h2 .num{font-family:var(--mono);font-size:11px;color:var(--accent-2);border:1px solid rgba(0,224,198,.3);padding:3px 8px;border-radius:6px;letter-spacing:.1em}
+  .progress{font-family:var(--mono);font-size:12px;color:var(--muted);display:flex;align-items:center;gap:10px}
+  .progress b{color:var(--text)}
+  .bar{width:140px;height:6px;border-radius:99px;background:rgba(255,255,255,.06);overflow:hidden;position:relative}
+  .bar > i{position:absolute;left:0;top:0;bottom:0;width:0%;background:linear-gradient(90deg,#7c5cff,#00e0c6);transition:width .6s cubic-bezier(.2,.7,.2,1);box-shadow:0 0 12px rgba(0,224,198,.5)}
+
+  .tasks{padding:10px}
+  .task{display:flex;align-items:center;gap:16px;padding:18px;border-radius:14px;transition:background .25s;border:1px solid transparent}
+  .task:hover{background:rgba(255,255,255,.02);border-color:var(--line)}
+  .task + .task{border-top:1px dashed rgba(255,255,255,.06)}
+  .task .idx{flex:none;width:38px;height:38px;border-radius:11px;display:grid;place-items:center;font-family:var(--mono);font-size:12px;background:rgba(124,92,255,.1);border:1px solid rgba(124,92,255,.25);color:#b7a8ff;font-weight:600}
+  .task.done .idx{background:rgba(34,214,138,.12);border-color:rgba(34,214,138,.3);color:var(--ok)}
+  .task .info{flex:1;min-width:0}
+  .task .info .t{font-weight:600;font-size:15px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .task .info .t .tag{font-family:var(--mono);font-size:10px;letter-spacing:.1em;padding:2px 7px;border-radius:5px;border:1px solid var(--line-2);color:var(--muted)}
+  .task .info .d{color:var(--muted);font-size:13px;margin-top:3px}
+  .task .go{
+    flex:none;display:inline-flex;align-items:center;gap:8px;
+    padding:10px 16px;border-radius:11px;
+    background:linear-gradient(180deg,#7c5cff,#5a3ce0);color:#fff;
+    text-decoration:none;font-size:13px;font-weight:600;border:0;cursor:pointer;
+    box-shadow:0 6px 22px -6px rgba(124,92,255,.6);
+    transition:transform .15s, filter .2s;white-space:nowrap;
+  }
+  .task .go:hover{transform:translateY(-1px);filter:brightness(1.1)}
+  .task .go svg{width:14px;height:14px}
+
+  .gate{padding:26px;border-top:1px solid var(--line);background:linear-gradient(180deg, transparent, rgba(124,92,255,.04));text-align:center}
+  .lockline{font-family:var(--mono);font-size:12px;letter-spacing:.14em;color:var(--muted);text-transform:uppercase;display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:14px}
+  .lk{width:10px;height:10px;border-radius:50%;background:var(--accent-3);box-shadow:0 0 12px var(--accent-3)}
+
+  .cta{
+    display:inline-flex;align-items:center;gap:12px;
+    padding:16px 30px;border-radius:14px;border:0;cursor:pointer;
+    font-size:15px;font-weight:800;letter-spacing:.12em;
+    color:#05050a;background:linear-gradient(135deg,#00e0c6,#7c5cff 55%,#ff3b6b);
+    background-size:200% 200%;
+    animation:flow 4s ease-in-out infinite;
+    box-shadow:0 20px 60px -20px rgba(124,92,255,.9);
+    text-decoration:none;font-family:var(--sans);
+  }
+  .cta:hover{transform:translateY(-2px) scale(1.02)}
+  @keyframes flow{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+
+  .unlock{display:none;margin:8px auto 4px;position:relative}
+  .unlock.show{display:inline-block;animation:pop .5s cubic-bezier(.2,.7,.2,1) both}
+  @keyframes pop{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:none}}
+
+  .hintline{font-family:var(--mono);font-size:11px;color:var(--dim);letter-spacing:.1em;margin-top:14px}
+  .hintline b{color:var(--accent-2)}
+  .hintline.warn b{color:var(--gold)}
+
+  .timer{display:none;flex-direction:column;align-items:center;gap:12px;margin:8px 0 6px}
+  .timer.show{display:flex;animation:drop .4s ease both}
+  .ring{position:relative;width:96px;height:96px}
+  .ring svg{transform:rotate(-90deg);width:100%;height:100%}
+  .ring circle{fill:none;stroke-width:6;stroke-linecap:round}
+  .ring .trk{stroke:rgba(255,255,255,.06)}
+  .ring .bar2{stroke:url(#rg);transition:stroke-dashoffset .35s linear}
+  .ring .num{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--mono);font-size:22px;font-weight:600;color:var(--text)}
+  .timer small{font-family:var(--mono);font-size:11px;letter-spacing:.2em;color:var(--muted);text-transform:uppercase}
+
+  .verify-box{
+    display:none;margin-top:12px;padding:16px 20px;border-radius:14px;
+    border:1px dashed rgba(124,92,255,.35);
+    background:rgba(124,92,255,.05);
+    max-width:520px;margin-left:auto;margin-right:auto;text-align:left;
+  }
+  .verify-box.show{display:block;animation:drop .35s ease both}
+  .verify-box .row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .verify-box .status{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--gold);text-transform:uppercase;display:flex;align-items:center;gap:8px}
+  .verify-box .status .spin{
+    width:10px;height:10px;border-radius:50%;
+    border:2px solid rgba(255,176,32,.3);border-top-color:var(--gold);
+    animation:rot .8s linear infinite;
+  }
+  @keyframes rot{to{transform:rotate(360deg)}}
+  .verify-box .msg{color:var(--muted);font-size:13px;margin-top:8px}
+  .verify-box .msg b{color:var(--text)}
+
+  .faq{margin-top:44px;display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+  .q{border:1px solid var(--line);background:var(--panel);border-radius:16px;padding:18px 20px}
+  .q h4{margin:0 0 6px;font-size:14px;font-weight:600}
+  .q p{margin:0;color:var(--muted);font-size:13.5px;line-height:1.6}
+  footer{margin-top:60px;text-align:center;font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--dim)}
+  footer a{color:var(--muted);text-decoration:none;border-bottom:1px dotted var(--dim)}
+  footer a:hover{color:var(--accent-2)}
+  .conf{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:99}
+  .p{position:absolute;width:8px;height:14px;opacity:.9;animation:fall linear forwards}
+  @keyframes fall{to{transform:translateY(110vh) rotate(720deg);opacity:0}}
+  @media (max-width:820px){
+    .faq{grid-template-columns:1fr}
+    .task{flex-wrap:wrap}
+    .task .go{width:100%;justify-content:center}
+    .board-head{flex-direction:column;align-items:flex-start}
+    .progress{width:100%}.bar{flex:1}
+  }
+  @media (max-width:480px){
+    .wrap{padding:14px 14px 60px}
+    nav{padding:10px 12px}
+    .board-head{padding:16px 18px}
+    .task{padding:14px 12px}
+    .gate{padding:22px 14px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <nav>
+    <a class="brand" href="#" onclick="return false">
+      <div class="orb"></div>
+      <div>
+        <b>EMPIRE01SEC</b>
+        <small>SECURITY DIVISION</small>
+      </div>
+    </a>
+    <div class="pill"><span class="live"></span><span id="onlineTxt">— operators online</span></div>
+  </nav>
+
+  <section class="hero">
+    <div class="eyebrow"><span class="dotp"></span> VERIFIED UNLOCK GATE</div>
+    <h1>Unlock the <span class="grad">DDoS Tool</span><br/>for free.</h1>
+    <p class="sub">
+      Join the channels, then click <b>Verify</b>. The bot checks your membership in real time.
+      Only after the bot confirms do we hand you the private tool link.
+    </p>
+  </section>
+
+  <section class="board">
+    <div class="board-head">
+      <h2><span class="num">STEP 1</span> Join the channels</h2>
+      <div class="progress">
+        <span>progress</span>
+        <b id="progressTxt">0 / 2</b>
+        <div class="bar"><i id="progressBar"></i></div>
+      </div>
+    </div>
+
+    <div class="tasks" id="tasks"></div>
+
+    <div class="gate">
+      <div class="lockline"><span class="lk" id="lockDot"></span><span id="lockTxt">Join both channels to continue</span></div>
+
+      <button class="cta" id="verifyBtn" disabled>VERIFY MEMBERSHIP →</button>
+
+      <div class="verify-box" id="verifyBox">
+        <div class="row">
+          <div class="status"><span class="spin"></span><span id="vStatus">Waiting for you to open the bot…</span></div>
+        </div>
+        <div class="msg" id="vMsg">
+          A Telegram bot is checking your membership. Open the link below, then return here.
+          <div style="margin-top:10px">
+            <a class="cta" id="botLink" href="#" target="_blank" rel="noopener" style="padding:10px 18px;font-size:13px">OPEN VERIFY BOT</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="timer" id="timer">
+        <div class="ring">
+          <svg viewBox="0 0 100 100">
+            <defs>
+              <linearGradient id="rg" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#7c5cff"/>
+                <stop offset="100%" stop-color="#00e0c6"/>
+              </linearGradient>
+            </defs>
+            <circle class="trk" cx="50" cy="50" r="44"></circle>
+            <circle class="bar2" cx="50" cy="50" r="44" stroke-dasharray="276.5" stroke-dashoffset="276.5"></circle>
+          </svg>
+          <div class="num" id="ringNum">15</div>
+        </div>
+        <small>Verified — hold on, preparing your link</small>
+      </div>
+
+      <a class="unlock" id="unlockBtn" href="#" target="_blank" rel="noopener">
+        🔓 UNLOCK DDOS TOOL
+      </a>
+
+      <div class="hintline" id="hintline">Both channels must be joined. The bot checks in real time.</div>
+    </div>
+  </section>
+
+  <section class="faq">
+    <div class="q"><h4>How does verification work?</h4><p>You click Verify → we hand you a one-time Telegram bot link → the bot calls Telegram's API to check your membership in both channels. If you're in, the site unlocks automatically. No fake pass.</p></div>
+    <div class="q"><h4>What if I'm already in the channels?</h4><p>The bot will confirm instantly. No need to leave and rejoin.</p></div>
+    <div class="q"><h4>Why do I see "not verified"?</h4><p>Either you haven't joined one of the channels, or you left since joining. Open the bot link and tap "Re-check" after joining.</p></div>
+    <div class="q"><h4>How long is the token valid?</h4><p>15 minutes per verification attempt. Expired? Click Verify again.</p></div>
+  </section>
+
+  <footer>
+    EMPIRE01SEC © <span id="yr"></span> · <a href="https://t.me/Empire01Sec" target="_blank" rel="noopener">@Empire01Sec</a>
+  </footer>
+</div>
+
+<script>
+(() => {
+  "use strict";
+
+  // ============ CONFIG ============
+  // paste the URL of your running bot here (Railway/Render/Fly/VPS)
+  const BOT_API = "https://your-bot-host.example.com";
+  // ================================
+
+  const TASKS = [
+    { id:"empire", title:"Join @Empire01Sec", tag:"CHANNEL", desc:"Main channel — required.", url:"https://t.me/Empire01Sec" },
+    { id:"qxcyber", title:"Join @Qxcyber666",  tag:"CHANNEL", desc:"Second channel — required.", url:"https://t.me/Qxcyber666" }
+  ];
+  const UNLOCK_URL = "https://t.me/+LdOfwqKw_I4yODVl";
+  const WAIT_SECONDS = 15;
+
+  const $ = id => document.getElementById(id);
+  const tasksEl = $("tasks"), progressTxt = $("progressTxt"), progressBar = $("progressBar");
+  const lockTxt = $("lockTxt"), lockDot = $("lockDot");
+  const verifyBtn = $("verifyBtn"), verifyBox = $("verifyBox");
+  const vStatus = $("vStatus"), vMsg = $("vMsg"), botLink = $("botLink");
+  const timerEl = $("timer"), ringNum = $("ringNum"), ringBar = document.querySelector(".ring .bar2");
+  const unlockBtn = $("unlockBtn"), hintline = $("hintline"), onlineTxt = $("onlineTxt");
+
+  $("yr").textContent = new Date().getFullYear();
+
+  const visited = new Set();
+  let verifyToken = null;
+  let pollHandle = null;
+  let timerHandle = null;
+  let remaining = WAIT_SECONDS;
+
+  // ---- render tasks ----
+  TASKS.forEach((t, i) => {
+    const row = document.createElement("div");
+    row.className = "task"; row.dataset.id = t.id;
+    row.innerHTML = `
+      <div class="idx">${String(i+1).padStart(2,"0")}</div>
+      <div class="info">
+        <div class="t">${t.title} <span class="tag">${t.tag}</span></div>
+        <div class="d">${t.desc}</div>
+      </div>
+      <a class="go" href="${t.url}" target="_blank" rel="noopener" data-id="${t.id}">
+        OPEN
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>
+      </a>`;
+    tasksEl.appendChild(row);
+  });
+
+  tasksEl.addEventListener("click", e => {
+    const a = e.target.closest(".go"); if (!a) return;
+    const id = a.dataset.id;
+    setTimeout(() => {
+      visited.add(id);
+      a.classList.add("checked");
+      a.style.background = "rgba(34,214,138,.12)";
+      a.style.border = "1px solid rgba(34,214,138,.35)";
+      a.style.color = "var(--ok)";
+      a.style.boxShadow = "none";
+      a.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> OPENED`;
+      updateProgress();
+    }, 350);
+  });
+
+  function updateProgress() {
+    const n = visited.size, total = TASKS.length;
+    progressTxt.textContent = `${n} / ${total}`;
+    progressBar.style.width = `${(n/total)*100}%`;
+    if (n === total) {
+      verifyBtn.disabled = false;
+      verifyBtn.style.animation = "flow 4s ease-in-out infinite, pop .4s cubic-bezier(.2,.7,.2,1)";
+      lockTxt.textContent = "Ready to verify — click the button";
+      lockDot.style.background = "var(--gold)";
+      lockDot.style.boxShadow = "0 0 12px var(--gold)";
+      hintline.innerHTML = `Now click <b>VERIFY MEMBERSHIP</b>. The bot will check both channels.`;
+    } else {
+      lockTxt.textContent = `${total - n} channel${total-n===1?"":"s"} left to open`;
+    }
+  }
+
+  // ---- verify button ----
+  verifyBtn.addEventListener("click", async () => {
+    verifyBtn.disabled = true;
+    verifyBtn.textContent = "CONTACTING BOT…";
+    verifyBox.classList.add("show");
+    try {
+      const r = await fetch(BOT_API + "/api/create", { method: "POST" });
+      const j = await r.json();
+      verifyToken = j.token;
+      botLink.href = j.t.me;
+      botLink.textContent = "OPEN VERIFY BOT →";
+      vStatus.textContent = "Waiting for you to open the bot…";
+      vMsg.innerHTML = `Open the bot link below, then tap <b>Start</b>. The bot checks your membership and reports back automatically.
+        <div style="margin-top:10px"><a class="cta" id="botLinkInner" href="${j.t.me}" target="_blank" rel="noopener" style="padding:10px 18px;font-size:13px">OPEN VERIFY BOT →</a></div>`;
+      pollVerify();
+    } catch (err) {
+      vStatus.textContent = "Bot unreachable";
+      vMsg.innerHTML = `The verification server isn't responding. Try again in a moment.`;
+      verifyBtn.disabled = false;
+      verifyBtn.textContent = "VERIFY MEMBERSHIP →";
+    }
+  });
+
+  function pollVerify() {
+    if (!verifyToken) return;
+    clearInterval(pollHandle);
+    pollHandle = setInterval(async () => {
+      try {
+        const r = await fetch(BOT_API + "/api/check?token=8446717192:AAFYIr7GWKWIeGys5Rji56TPQ9_slbN5HeE" + encodeURIComponent(verifyToken));
+        const j = await r.json();
+        if (j.verified) {
+          clearInterval(pollHandle);
+          vStatus.textContent = "Verified";
+          vMsg.innerHTML = `Membership confirmed in <b>all channels</b>. Preparing your link…`;
+          verifyBtn.textContent = "VERIFIED ✓";
+          startTimer();
+        } else if (j.expired) {
+          clearInterval(pollHandle);
+          vStatus.textContent = "Session expired";
+          vMsg.innerHTML = `Token expired. Click Verify again.`;
+          verifyBtn.disabled = false;
+          verifyBtn.textContent = "VERIFY MEMBERSHIP →";
+        }
+      } catch {}
+    }, 2000);
+  }
+
+  // ---- 15s timer + unlock ----
+  function startTimer() {
+    if (timerHandle) return;
+    unlockBtn.href = UNLOCK_URL;
+    timerEl.classList.add("show");
+    remaining = WAIT_SECONDS;
+    paintRing();
+    timerHandle = setInterval(() => {
+      remaining -= 1;
+      paintRing();
+      if (remaining <= 0) {
+        clearInterval(timerHandle);
+        timerHandle = null;
+        finish();
+      }
+    }, 1000);
+  }
+
+  function paintRing() {
+    ringNum.textContent = remaining;
+    const circ = 2 * Math.PI * 44;
+    const progress = (WAIT_SECONDS - remaining) / WAIT_SECONDS;
+    ringBar.setAttribute("stroke-dashoffset", String(circ * (1 - progress)));
+  }
+
+  function finish() {
+    timerEl.classList.remove("show");
+    unlockBtn.classList.add("show");
+    lockDot.style.background = "var(--ok)";
+    lockDot.style.boxShadow = "0 0 12px var(--ok)";
+    lockTxt.textContent = "Access granted";
+    hintline.innerHTML = `Click <b>UNLOCK DDOS TOOL</b> to enter the private group.`;
+    hintline.classList.remove("warn");
+    burstConfetti();
+  }
+
+  function burstConfetti() {
+    const colors = ["#7c5cff","#00e0c6","#ff3b6b","#ffb020","#ffffff"];
+    const c = document.createElement("div"); c.className = "conf"; document.body.appendChild(c);
+    for (let i = 0; i < 90; i++) {
+      const p = document.createElement("div"); p.className = "p";
+      p.style.left = Math.random()*100 + "vw";
+      p.style.top = "-20px";
+      p.style.background = colors[(Math.random()*colors.length)|0];
+      p.style.animationDuration = (1.6 + Math.random()*1.6) + "s";
+      p.style.animationDelay = (Math.random()*0.4) + "s";
+      c.appendChild(p);
+    }
+    setTimeout(() => c.remove(), 4200);
+  }
+
+  // ---- fake online counter ----
+  (function(){
+    let n = 214 + Math.floor(Math.random()*90);
+    const base = n;
+    onlineTxt.textContent = `${n.toLocaleString()} operators online`;
+    setInterval(() => {
+      n += Math.floor(Math.random()*5) - 2;
+      if (n < base-30) n = base-10; if (n > base+40) n = base+20;
+      onlineTxt.textContent = `${n.toLocaleString()} operators online`;
+    }, 3200);
+  })();
+})();
+</script>
+</body>
+</html>
